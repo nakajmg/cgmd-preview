@@ -3,6 +3,7 @@ const cgmd = new CGMD();
 const ipc = require('electron').ipcRenderer;
 const path = require('path');
 const iframe = document.querySelector('iframe');
+const unescapejs = require('unescape-js');
 
 ipc.on('open-markdown', (e, file) => {
   const dirname = path.dirname(file.path);
@@ -11,6 +12,10 @@ ipc.on('open-markdown', (e, file) => {
   const article = cgmd.render(file.md);
   updatePreview(article);
   updateCount(file.count);
+});
+
+ipc.on('report-textlint', (e, results) => {
+  document.querySelector('#log').innerHTML = results;
 });
 
 function updatePreview(article) {

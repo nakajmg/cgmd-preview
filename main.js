@@ -4,6 +4,8 @@ const Menu = require('menu');
 const fs = require('fs-extra');
 const chokidar = require('chokidar');
 const ipcMain = require('electron').ipcMain;
+const TextLintEngine = require('textlint').TextLintEngine;
+const textlint = new TextLintEngine({});
 
 require("crash-reporter").start();
 
@@ -46,12 +48,73 @@ function watch(filePath) {
   }
   watcher = chokidar.watch(filePath, {ignored: /[\/\\]\./}).on('all', (event, filePath) => {
     updatePreview(filePath);
+    lint(filePath);
   });
 }
 
+function lint(filePath) {
+  textlint.executeOnFiles([filePath]).then(results => {
+    if (textlint.isErrorResults(results)) {
+      let result = reporter(results);
+      mainWindow.webContents.send('report-textlint', result);
+    }
+  });
+}
+
+function reporter(results) {
+  function report({line, message}) {
+    var [left, right] = message.split(' => ');
+    return `<p>line: ${line} <span style="color: red;">${left}</span> => <span style="color: green;">${right}</span></p>`;
+  }
+  let result = results.map(result => {
+    let html = result.messages.map(m => {
+      return report(m);
+    });
+    return html.join('\n')
+  }).join('\n');
+  return result;
+}
 
 
 const menuTemplate = [
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
+      },
+      {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall'
+      }
+    ]
+  },
   {
     label: 'ReadUs',
     submenu: [
