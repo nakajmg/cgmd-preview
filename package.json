@@ -1,7 +1,9 @@
 {
   "name": "CGMD-Preview",
+  "version": "0.1.0",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "build": "electron-packager . ../cgmd-preview --platform=darwin --arch=x64 --version=0.37.6 --overwrite"
   },
   "main": "main.js",
   "dependencies": {
@@ -9,5 +11,9 @@
     "codegrid-markdown": "^2.1.0",
     "fs-extra": "^0.27.0",
     "jquery": "^2.2.3"
+  },
+  "devDependencies": {
+    "electron-prebuild": "0.37.6",
+    "electron-packager": "7.0.0"
   }
 }
