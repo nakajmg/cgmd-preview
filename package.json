@@ -1,0 +1,13 @@
+{
+  "name": "CGMD-Preview",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "main": "main.js",
+  "dependencies": {
+    "chokidar": "^1.4.3",
+    "codegrid-markdown": "^2.1.0",
+    "fs-extra": "^0.27.0",
+    "jquery": "^2.2.3"
+  }
+}

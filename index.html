@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CGMD Preview</title>
+  <link rel="stylesheet" href="./style.min.css">
+</head>
+<body>
+  <div class="app">
+    <header class="Header"><h1>CGMD Preview</h1></header>
+    <div class="Container_item">
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+<script>
+  var CGMD = require('codegrid-markdown');
+  var cgmd = new CGMD();
+  var ipc = require('electron').ipcRenderer;
+  var path = require('path');
+  var iframe = document.querySelector('iframe');
+
+  ipc.on('open-markdown', function(e, arg) {
+    var dirname = path.dirname(arg.path);
+    arg.md = arg.md.replace(/\.\//, dirname + '/');
+    var article = cgmd.render(arg.md);
+    updatePreview(article);
+  });
+
+  function updatePreview(article) {
+    const html = `
+      <html>
+      <head>
+        <link rel="stylesheet" href="http://ui.codegrid.net/assets2/css/codegrid-ui.min.css">
+      </head>
+      <body>
+        <div class="CG2-narrowLayout">
+          <div class="CG2-narrowLayout__main">
+            <article class="CG2-article">
+              ${article}
+            </article>
+          </div>
+        </div>
+        <script src="http://ui.codegrid.net/assets2/js/codegrid-ui.min.js"><\/script>
+      </body>
+      </html>
+      `;
+
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(html);
+    iframe.contentWindow.document.close();
+  }
+
+</script>
+</body>
+</html>
