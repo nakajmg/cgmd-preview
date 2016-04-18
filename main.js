@@ -34,7 +34,8 @@ function updatePreview(filePath) {
   fs.readFile(filePath, 'utf8', (err, file) => {
     mainWindow.webContents.send('open-markdown', {
       md: file,
-      path: filePath
+      path: filePath,
+      count: file.length
     });
   });
 }

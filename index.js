@@ -4,12 +4,13 @@ const ipc = require('electron').ipcRenderer;
 const path = require('path');
 const iframe = document.querySelector('iframe');
 
-ipc.on('open-markdown', (e, arg) => {
-  const dirname = path.dirname(arg.path);
-  setCurrentFilePath(arg.path);
-  arg.md = arg.md.replace(/\.\//, dirname + '/');
-  const article = cgmd.render(arg.md);
+ipc.on('open-markdown', (e, file) => {
+  const dirname = path.dirname(file.path);
+  setCurrentFilePath(file.path);
+  file.md = file.md.replace(/\.\//, dirname + '/');
+  const article = cgmd.render(file.md);
   updatePreview(article);
+  updateCount(file.count);
 });
 
 function updatePreview(article) {
@@ -42,6 +43,10 @@ function setCurrentFilePath(filePath) {
 
 function getPrevFilePath() {
   return window.localStorage.getItem('CGMD-Preview');
+}
+
+function updateCount(count) {
+  document.querySelector('#count').textContent = count;
 }
 
 const prevPath = getPrevFilePath();
