@@ -4,8 +4,11 @@ const Menu = require('menu');
 const fs = require('fs-extra');
 const chokidar = require('chokidar');
 const ipcMain = require('electron').ipcMain;
+const path = require('path');
 const TextLintEngine = require('textlint').TextLintEngine;
-const textlint = new TextLintEngine({});
+const textlint = new TextLintEngine({
+  configFile: path.resolve(__dirname, './textlintrc.json')
+});
 
 require("crash-reporter").start();
 
