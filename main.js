@@ -61,6 +61,9 @@ function lint(filePath) {
       let result = reporter(results);
       mainWindow.webContents.send('report-textlint', result);
     }
+    else {
+      mainWindow.webContents.send('report-textlint', '');
+    }
   });
 }
 
