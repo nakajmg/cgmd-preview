@@ -7,7 +7,7 @@ const iframe = document.querySelector('iframe');
 ipc.on('open-markdown', (e, file) => {
   const dirname = path.dirname(file.path);
   setCurrentFilePath(file.path);
-  file.md = file.md.replace(/\.\//, dirname + '/');
+  file.md = file.md.replace(/\(\.\//g, '(' + dirname + '/');
   const article = cgmd.render(file.md);
   updatePreview(article);
   updateCount(file.count);
