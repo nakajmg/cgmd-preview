@@ -2,7 +2,8 @@ const CGMD = require('codegrid-markdown');
 const cgmd = new CGMD();
 const ipc = require('electron').ipcRenderer;
 const path = require('path');
-const iframe = document.querySelector('iframe');
+const $iframe = document.querySelector('iframe');
+const $log = document.querySelector('#log');
 
 ipc.on('open-markdown', (e, file) => {
   const dirname = path.dirname(file.path);
@@ -14,7 +15,11 @@ ipc.on('open-markdown', (e, file) => {
 });
 
 ipc.on('report-textlint', (e, results) => {
-  document.querySelector('#log').innerHTML = results;
+  $log.innerHTML = results;
+});
+
+ipc.on('set-rule-path', (e, filePath) => {
+  setCurrentRulePath(filePath);
 });
 
 function updatePreview(article) {
@@ -36,9 +41,9 @@ function updatePreview(article) {
       </html>
       `;
 
-  iframe.contentWindow.document.open();
-  iframe.contentWindow.document.write(html);
-  iframe.contentWindow.document.close();
+  $iframe.contentWindow.document.open();
+  $iframe.contentWindow.document.write(html);
+  $iframe.contentWindow.document.close();
 }
 
 function setCurrentFilePath(filePath) {
@@ -49,6 +54,14 @@ function getPrevFilePath() {
   return window.localStorage.getItem('CGMD-Preview');
 }
 
+function setCurrentRulePath(filePath) {
+  window.localStorage.setItem('CGMD-rule-path', filePath);
+}
+
+function getPrevRulePath() {
+  return window.localStorage.getItem('CGMD-rule-path');
+}
+
 function updateCount(count) {
   document.querySelector('#count').textContent = count;
 }
@@ -56,4 +69,9 @@ function updateCount(count) {
 const prevPath = getPrevFilePath();
 if (prevPath) {
   ipc.send('display-prev', prevPath);
+}
+
+const prevRulePath = getPrevRulePath();
+if (prevRulePath) {
+  ipc.send('apply-prev-rule', prevRulePath);
 }
