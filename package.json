@@ -1,6 +1,6 @@
 {
   "name": "CGMD-Preview",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "start": "electron main.js",
     "build": "electron-packager . ../cgmd-preview --platform=darwin --arch=x64 --version=0.37.6 --overwrite"
@@ -10,6 +10,7 @@
     "chokidar": "^1.4.3",
     "codegrid-markdown": "^2.1.0",
     "fs-extra": "^0.27.0",
+    "temp": "^0.8.3",
     "textlint": "^6.3.0",
     "textlint-rule-prh": "^2.4.1"
   },
