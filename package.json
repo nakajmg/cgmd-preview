@@ -8,14 +8,10 @@
   "main": "main.js",
   "dependencies": {
     "chokidar": "^1.4.3",
-    "codegrid-markdown": "^2.1.0",
+    "codegrid-markdown": "^3.0.3",
     "fs-extra": "^0.27.0",
     "temp": "^0.8.3",
     "textlint": "^6.3.0",
     "textlint-rule-prh": "^2.4.1"
-  },
-  "devDependencies": {
-    "electron-prebuild": "0.37.6",
-    "electron-packager": "7.0.0"
   }
 }
