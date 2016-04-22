@@ -117,3 +117,37 @@ h1 {
 .CG2-article {
   /*padding-top: 30px !important;*/
 }
+
+dialog {
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  padding: 50px 25px;
+  border: 0;
+  box-sizing: border-box;
+  font-family: Hiragino Kaku Gothic Pro,Meiryo;
+  background-color: rgba(0,0,0,.7);
+}
+dialog > div {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 700px;
+  max-height: 100%;
+  background-color: #fff;
+  overflow-y: scroll;
+  border-radius: 3px;
+}
+
+dialog pre {
+  color: black;
+  text-shadow: 0 1px white;
+  padding: 16px;
+  overflow: auto;
+  line-height: 1.45;
+  background-color: #f5f2f0;
+  border-radius: 3px;
+}
+dialog pre, dialog code {
+  font-family: Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace !important;
+}
+dialog .hljs{display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:bold}.hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable,.hljs-tag .hljs-attr{color:#008080}.hljs-string,.hljs-doctag{color:#d14}.hljs-title,.hljs-section,.hljs-selector-id{color:#900;font-weight:bold}.hljs-subst{font-weight:normal}.hljs-type,.hljs-class .hljs-title{color:#458;font-weight:bold}.hljs-tag,.hljs-name,.hljs-attribute{color:#000080;font-weight:normal}.hljs-regexp,.hljs-link{color:#009926}.hljs-symbol,.hljs-bullet{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:bold}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}

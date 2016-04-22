@@ -164,28 +164,14 @@ function watch(filePath) {
   });
 }
 
+function toggleHelp() {
+  mainWindow.webContents.send('toggle-help');
+}
+
 const menuTemplate = [
   {
     label: 'Edit',
     submenu: [
-      {
-        label: 'Undo',
-        accelerator: 'CmdOrCtrl+Z',
-        role: 'undo'
-      },
-      {
-        label: 'Redo',
-        accelerator: 'Shift+CmdOrCtrl+Z',
-        role: 'redo'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Cut',
-        accelerator: 'CmdOrCtrl+X',
-        role: 'cut'
-      },
       {
         label: 'Copy',
         accelerator: 'CmdOrCtrl+C',
@@ -214,7 +200,7 @@ const menuTemplate = [
     label: 'File',
     submenu: [
       {
-        label: 'Open',
+        label: 'Open File',
         accelerator: 'Command+O',
         click: () => {
           require('dialog').showOpenDialog(
@@ -277,6 +263,18 @@ const menuTemplate = [
         accelerator: 'Command+Shift+T',
         click: () => {
           toggleTextlint();
+        }
+      }
+    ]
+  },
+  {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'Show Help',
+        accelerator: 'Command+H',
+        click: () => {
+          toggleHelp();
         }
       }
     ]
