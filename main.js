@@ -7,6 +7,7 @@ const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const TextLintEngine = require('textlint').TextLintEngine;
 const temp = require('temp');
+const wordCounter = require('./lib/wordCounter');
 
 var __tempDirPath;
 var __textlintConfigPath;
@@ -148,7 +149,7 @@ function updatePreview(filePath) {
     mainWindow.webContents.send('open-markdown', {
       md: file,
       path: filePath,
-      count: file.length
+      count: wordCounter(file)
     });
   });
 }
