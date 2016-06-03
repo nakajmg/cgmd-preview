@@ -47,6 +47,15 @@ function updatePreview(article) {
           </div>
         </div>
         <script src="http://ui.codegrid.net/assets2/js/codegrid-ui.min.js"><\/script>
+        <script>
+          [].forEach.call(document.querySelectorAll('a[href]'), (el) => {
+            el.addEventListener('click', (e) => {
+              e.preventDefault();
+              var href = e.target.getAttribute('href');
+              window.parent.postMessage(href, '*');
+            });
+          });
+        <\/script>
       </body>
       </html>
       `;
@@ -115,4 +124,9 @@ if (prevRulePath) {
 
 setReadme();
 
-
+window.addEventListener('message', (e) => {
+  var open = require('open');
+  if (e.origin === 'file://') {
+    open(e.data);
+  }
+});
