@@ -52,9 +52,29 @@ function updatePreview(article) {
             el.addEventListener('click', (e) => {
               e.preventDefault();
               var href = e.target.getAttribute('href');
-              window.parent.postMessage(href, '*');
+              window.parent.postMessage({type: 'href', href}, '*');
             });
           });
+          window.addEventListener('load', () => {
+            var height = document.querySelector('.CG2-narrowLayout').clientHeight;
+            window.parent.postMessage({type: 'height', height}, '*');
+          });
+          
+          var postHeight = (function() {
+            var interval = 300;
+            var timer;
+            
+            return function() {
+              clearTimeout(timer);
+              timer = setTimeout(function() {
+                var height = document.querySelector('.CG2-narrowLayout').clientHeight + 'px';
+                window.parent.postMessage({type: 'height', height}, '*');    
+              }, interval);
+            }
+          })();
+          
+          window.addEventListener('resize', postHeight);
+          
         <\/script>
       </body>
       </html>
@@ -83,6 +103,10 @@ function getPrevRulePath() {
 
 function updateCount(count) {
   document.querySelector('#count').textContent = count;
+}
+
+function updateHeight(height) {
+  document.querySelector('#height').textContent = height;
 }
 
 function setReadme() {
@@ -126,7 +150,14 @@ setReadme();
 
 window.addEventListener('message', (e) => {
   var open = require('open');
-  if (e.origin === 'file://') {
-    open(e.data);
+  if (e.origin !== 'file://') return;
+
+  switch(e.data.type) {
+    case 'href':
+      open(e.data.href);
+      break;
+    case 'height':
+      updateHeight(e.data.height);
+      break;
   }
 });
