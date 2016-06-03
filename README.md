@@ -17,3 +17,5 @@ When file saved then update preview.
 `Cmd+Shift+O`: Set Textlint rule (`.yml`).
 
 `Cmd+Shift+T`: Toggle enable/disable Textlint.
+
+`Cmd+H` : Show codegrid-markdown help.
