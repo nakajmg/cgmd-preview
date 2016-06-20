@@ -1,7 +1,8 @@
-const app = require("app");
-const BrowserWindow = require("browser-window");
-const Menu = require('menu');
-const fs = require('fs-extra');
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const Menu = electron.Menu;
+const fs = require('fs');
 const chokidar = require('chokidar');
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
@@ -47,7 +48,7 @@ app.on("ready", () => {
     });
 });
 
-require("crash-reporter").start({
+electron.crashReporter.start({
   companyName: 'cgmd-preview',
   submitURL: 'https://github.com/nakajmg/cgmd-preview/issues'
 });
@@ -204,7 +205,7 @@ const menuTemplate = [
         label: 'Open File',
         accelerator: 'Command+O',
         click: () => {
-          require('dialog').showOpenDialog(
+          electron.dialog.showOpenDialog(
             {
               properties: ['openFile'],
               filters: [
@@ -221,7 +222,7 @@ const menuTemplate = [
         label: 'Set Dictionary',
         accelerator: 'Command+Shift+O',
         click: () => {
-          require('dialog').showOpenDialog(
+          electron.dialog.showOpenDialog(
             {
               properties: ['openFile'],
               filters:[
