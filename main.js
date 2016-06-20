@@ -1,3 +1,5 @@
+'use strict';
+require('babel-polyfill');
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -25,27 +27,25 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("ready", () => {
+app.on('ready', async () => {
   Menu.setApplicationMenu(menu);
-  createTempDir()
-    .then(() => {
-      mainWindow = new BrowserWindow({width: 1024, height: 768});
-      mainWindow.loadURL("file://" + __dirname + "/index.html");
+  await createTempDir();
+  mainWindow = new BrowserWindow({width: 1024, height: 768});
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-      ipcMain.on('display-prev', (e, filePath) => {
-        watch(filePath);
-      });
+  ipcMain.on('display-prev', (e, filePath) => {
+    watch(filePath);
+  });
 
-      ipcMain.on('apply-prev-rule', (e, rulePath) => {
-        createTextlintJSON(rulePath)
-          .then(initTextlintEngine)
-          .then(execLint);
-      });
+  ipcMain.on('apply-prev-rule', async (e, rulePath) => {
+    await createTextlintJSON(rulePath);
+    await initTextlintEngine();
+    await execLint();
+  });
 
-      mainWindow.on("closed", () => {
-        mainWindow = null;
-      });
-    });
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 });
 
 electron.crashReporter.start({
