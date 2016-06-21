@@ -1,14 +1,32 @@
 {
   "name": "CGMD-Preview",
   "version": "0.7.0",
+  "author": "nakajmg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nakajmg/cgmd-preview.git"
+  },
+  "license": "MIT",
   "scripts": {
-    "start": "electron cgmd.js",
-    "babel": "babel main.js -o cgmd.js",
+    "start": "electron dist/index.js",
     "build": "electron-packager ./ cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
   },
   "main": "main.js",
   "dependencies": {
     "axios": "^0.10.0",
+    "brfs": "^1.4.3",
+    "chokidar": "^1.4.3",
+    "codegrid-markdown": "^3.0.3",
+    "eventemitter2": "^1.0.3",
+    "fs-extra": "^0.27.0",
+    "highlight.js": "^9.3.0",
+    "marked": "^0.3.5",
+    "open": "0.0.5",
+    "temp": "^0.8.3",
+    "textlint": "^6.3.0",
+    "textlint-rule-prh": "^2.4.1"
+  },
+  "devDependencies": {
     "babel": "^6.5.2",
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
@@ -18,15 +36,11 @@
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-3": "^6.5.0",
-    "chokidar": "^1.4.3",
-    "codegrid-markdown": "^3.0.3",
-    "fs-extra": "^0.27.0",
-    "highlight.js": "^9.3.0",
-    "marked": "^0.3.5",
-    "open": "0.0.5",
-    "temp": "^0.8.3",
-    "textlint": "^6.3.0",
-    "textlint-rule-prh": "^2.4.1"
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "gulp": "^3.9.1",
+    "gulp-watchify": "^0.6.0",
+    "watchify": "^3.7.0"
   },
   "peerDependencies": {
     "electron-packager": "^7.0.4",
