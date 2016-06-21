@@ -6,7 +6,7 @@ const $iframe = document.querySelector('#preview');
 const $readme = document.querySelector('#readme');
 const $log = document.querySelector('#log');
 
-ipc.on('open-markdown', (e, file) => {
+ipc.on('openMarkdown', (e, file) => {
   const dirname = path.dirname(file.path);
   setCurrentFilePath(file.path);
   file.md = file.md.replace(/\(\.\//g, '(' + dirname + '/');
@@ -138,7 +138,7 @@ function setReadme() {
 
 const prevPath = getPrevFilePath();
 if (prevPath) {
-  ipc.send('display-prev', prevPath);
+  ipc.send('openPrevMarkdown', prevPath);
 }
 
 const prevRulePath = getPrevRulePath();
