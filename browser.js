@@ -143,7 +143,7 @@ if (prevPath) {
 
 const prevRulePath = getPrevRulePath();
 if (prevRulePath) {
-  ipc.send('apply-prev-rule', prevRulePath);
+  ipc.send('openDictionary', prevRulePath);
 }
 
 setReadme();

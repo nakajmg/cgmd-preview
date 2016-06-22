@@ -11,14 +11,13 @@
     "start": "electron dist/index.js",
     "build": "electron-packager ./ cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
   },
-  "main": "main.js",
+  "main": "index.js",
   "dependencies": {
     "axios": "^0.10.0",
     "brfs": "^1.4.3",
     "chokidar": "^1.4.3",
     "codegrid-markdown": "^3.0.3",
     "eventemitter2": "^1.0.3",
-    "fs-extra": "^0.27.0",
     "highlight.js": "^9.3.0",
     "marked": "^0.3.5",
     "open": "0.0.5",
