@@ -1,5 +1,6 @@
 import {dialog} from 'electron';
-import {ipcManager} from './ipcManager';
+import ipcManager from './ipcManager';
+import Event from './Event';
 
 export const menuTemplate = [
   {
@@ -25,8 +26,8 @@ export const menuTemplate = [
   {
     label: 'ReadUs',
     submenu: [
-      {label: 'Quit', accelerator: 'Command+Q', click: () => ipcManager.emit('quit')},
-      {label: 'Close', accelerator: 'Command+W', click: ()=> ipcManager.emit('quit')}
+      {label: 'Quit', accelerator: 'Command+Q', click: () => ipcManager.emit(Event.quit)},
+      {label: 'Close', accelerator: 'Command+W', click: ()=> ipcManager.emit(Event.quit)}
     ]
   },
   {
@@ -44,7 +45,7 @@ export const menuTemplate = [
               ]
             }, (filePaths) => {
               if (filePaths) {
-                ipcManager.emit('openMarkdown', filePaths[0]);
+                ipcManager.emit(Event.openMarkdown, filePaths[0]);
               }
             });
         }
@@ -61,7 +62,7 @@ export const menuTemplate = [
               ]
             }, (filePaths) => {
               if (filePaths) {
-                ipcManager.emit('openDictionary', filePaths[0]);
+                ipcManager.emit(Event.openDictionary, filePaths[0]);
               }
             });
         }
@@ -93,8 +94,7 @@ export const menuTemplate = [
         label: 'Toggle Textlint',
         accelerator: 'Command+Shift+T',
         click: () => {
-          ipcManager.emit('toggleLinter');
-//          toggleTextlint();
+          ipcManager.emit(Event.toggleLinter);
         }
       }
     ]
@@ -106,8 +106,7 @@ export const menuTemplate = [
         label: 'Show Help',
         accelerator: 'Command+H',
         click: () => {
-          ipcManager.emit('toggleHelp');
-//          toggleHelp();
+          ipcManager.emit(Event.toggleHelp);
         }
       }
     ]

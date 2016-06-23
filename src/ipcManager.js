@@ -1,5 +1,6 @@
 import {EventEmitter2 as EventEmitter} from 'eventemitter2';
 import {ipcMain} from 'electron';
+import Event from './Event';
 
 class IPCManager extends EventEmitter {
   constructor() {
@@ -8,17 +9,17 @@ class IPCManager extends EventEmitter {
   }
 
   _eventify() {
-    ipcMain.on('openPrevMarkdown', this._onOpenPrevMarkdown.bind(this));
-    ipcMain.on('openDictionary', this._onOpenDictionary.bind(this));
+    ipcMain.on(Event.openPrevMarkdown, this._onOpenPrevMarkdown.bind(this));
+    ipcMain.on(Event.openDictionary, this._onOpenDictionary.bind(this));
   }
 
   _onOpenPrevMarkdown(e, filePath) {
-    this.emit('openPrevMarkdown', filePath);
+    this.emit(Event.openPrevMarkdown, filePath);
   }
 
   _onOpenDictionary(e, rulePath) {
-    this.emit('openDictionary', rulePath);
+    this.emit(Event.openDictionary, rulePath);
   }
 }
 
-export const ipcManager = new IPCManager();
+export default new IPCManager();

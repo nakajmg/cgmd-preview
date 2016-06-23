@@ -15,8 +15,8 @@ ipc.on('openMarkdown', (e, file) => {
   updateCount(file.count);
 });
 
-ipc.on('report-textlint', (e, results) => {
-  $log.innerHTML = results;
+ipc.on('sendLintReport', (e, results) => {
+  $log.innerHTML = results ? results : '';
 });
 
 ipc.on('set-rule-path', (e, filePath) => {

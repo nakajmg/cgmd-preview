@@ -1,6 +1,7 @@
 import {TextLintEngine} from 'textlint';
 import prh from 'textlint-rule-prh';
-import {ipcManager} from './ipcManager';
+import ipcManager from './ipcManager';
+import Event from './Event';
 
 export default class Linter {
   constructor() {
@@ -8,17 +9,17 @@ export default class Linter {
   }
 
   _eventify() {
-    ipcManager.on('setRulePath', this._onSetRulePath.bind(this));
-    ipcManager.on('executeLint', this._onExecuteLint.bind(this));
-    ipcManager.on('openDictionary', this._onSetRulePath.bind(this));
-    ipcManager.on('updatePreview', this._onUpdatePreview.bind(this));
+    ipcManager.on(Event.setRulePath, this._onSetRulePath.bind(this));
+    ipcManager.on(Event.executeLint, this._onExecuteLint.bind(this));
+    ipcManager.on(Event.openDictionary, this._onSetRulePath.bind(this));
+    ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
   }
 
   _initTextlintEngine(rulePath) {
     var _this = this;
     return new Promise(function(resolve, reject) {
       _this.textlint = new TextLintEngine({});
-      var ruleConfig = {prh: {"rulePaths": [`${rulePath}`]}};
+      var ruleConfig = {prh: {rulePaths: [`${rulePath}`]}};
       _this.textlint.config.rules = ['prh'];
       _this.textlint.config.rulesConfig = ruleConfig;
       _this.textlint.textlint.ruleCreatorSet.rawRulesObject = {prh};
@@ -54,16 +55,31 @@ export default class Linter {
 
     this.textlint.executeOnFiles([filePath])
       .then((results) => {
-        if (this.textlint.isErrorResults(results)) {
-          results.forEach((result) => {
-            result.messages.forEach((msg) => {
-              console.log(msg);
-            });
-          });
-        }
-        else {
-          console.log('no error on lint');
-        }
-      })
+        this._sendLintReport(results);
+      });
   }
+  
+  _sendLintReport(results) {
+    var report;
+    function _reports(results) {
+      let result = results.map(result => {
+        let html = result.messages.map(m => {
+          return _report(m);
+        });
+        return html.join('\n')
+      }).join('\n');
+      return result;
+    }
+  
+    function _report({line, message}) {
+      var [left, right] = message.split(' => ');
+      return `<p>line: ${line} <span style="color: red;">${left}</span> => <span style="color: green;">${right}</span></p>`;
+    }
+    
+    if (this.textlint.isErrorResults(results)) {
+      report = _reports(results);
+    }
+    ipcManager.emit(Event.sendLintReport, report);
+  }
+  
 }

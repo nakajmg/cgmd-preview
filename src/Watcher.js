@@ -1,5 +1,6 @@
 import chokidar from 'chokidar';
-import {ipcManager} from './ipcManager';
+import ipcManager from './ipcManager';
+import Event from './Event';
 
 export default class Watcher {
   constructor() {
@@ -17,6 +18,6 @@ export default class Watcher {
   }
 
   _onChange(e, filePath) {
-    ipcManager.emit('updatePreview', filePath);
+    ipcManager.emit(Event.updatePreview, filePath);
   }
 }

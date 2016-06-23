@@ -3,10 +3,11 @@ import WindowManager from './WindowManager';
 import MenuManager from './MenuManager';
 import Watcher from './Watcher';
 import Linter from './Linter';
-import {ipcManager} from './ipcManager';
+import ipcManager from './ipcManager';
 import wordCounter from './wordCounter';
 import fs from 'fs';
 import 'babel-polyfill';
+import Event from './Event';
 
 export default class Main {
   constructor() {
@@ -19,14 +20,12 @@ export default class Main {
   _eventify() {
     this.app.on('ready', this._onReady.bind(this));
     this.app.on("window-all-closed", this._onQuit.bind(this));
-
-    ipcManager.on('quit', this._onQuit.bind(this));
-    ipcManager.on('openMarkdown', this._onOpenMarkdown.bind(this));
-    ipcManager.on('openPrevMarkdown', this._onOpenMarkdown.bind(this));
-//    ipcManager.on('openDictionary', this._onOpenDictionary.bind(this));
-    ipcManager.on('updatePreview', this._onUpdatePreview.bind(this));
-    ipcManager.on('toggleHelp', this._onToggleHelp.bind(this));
-    ipcManager.on('toggleLinter', this._onToggleLinter.bind(this));
+    ipcManager.on(Event.quit, this._onQuit.bind(this));
+    ipcManager.on(Event.openMarkdown, this._onOpenMarkdown.bind(this));
+    ipcManager.on(Event.openPrevMarkdown, this._onOpenMarkdown.bind(this));
+    ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
+    ipcManager.on(Event.toggleHelp, this._onToggleHelp.bind(this));
+    ipcManager.on(Event.toggleLinter, this._onToggleLinter.bind(this));
   }
 
   _onReady() {
@@ -46,10 +45,6 @@ export default class Main {
     this.sendMarkdown(filePath);
   }
 
-  _onOpenDictionary(rulePath) {
-//    ipcManager.emit('setRulePath', rulePath);
-  }
-
   _onToggleHelp() {
 
   }
@@ -60,7 +55,7 @@ export default class Main {
 
   sendMarkdown(filePath) {
     let file = fs.readFileSync(filePath, 'utf8');
-    ipcManager.emit('sendMarkdown', {
+    ipcManager.emit(Event.sendMarkdown, {
       md: file,
       path: filePath,
       count: wordCounter(file)
