@@ -38,6 +38,7 @@
     "browserify": "^13.0.1",
     "gulp": "^3.9.1",
     "gulp-watchify": "^0.6.0",
+    "run-sequence": "^1.2.1",
     "watchify": "^3.7.0"
   },
   "peerDependencies": {
