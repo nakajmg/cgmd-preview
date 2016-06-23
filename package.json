@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "start": "electron dist/index.js",
-    "build": "electron-packager ./ cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
+    "build": "electron-packager ./dist cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
   },
   "main": "index.js",
   "dependencies": {

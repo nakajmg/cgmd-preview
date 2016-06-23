@@ -1,9 +1,6 @@
 import {TextLintEngine} from 'textlint';
 import prh from 'textlint-rule-prh';
-import temp from 'temp';
-import path from 'path';
 import {ipcManager} from './ipcManager';
-import fs from 'fs';
 
 export default class Linter {
   constructor() {

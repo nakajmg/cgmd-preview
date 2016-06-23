@@ -1,3 +1,3 @@
-import Main from './lib/Main';
+import Main from 'src/Main';
 
 new Main();

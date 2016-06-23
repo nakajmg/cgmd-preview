@@ -10,7 +10,7 @@ const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const TextLintEngine = require('textlint').TextLintEngine;
 const temp = require('temp');
-const wordCounter = require('./lib/wordCounter');
+const wordCounter = require('./src/wordCounter');
 
 var __tempDirPath;
 var __textlintConfigPath;
