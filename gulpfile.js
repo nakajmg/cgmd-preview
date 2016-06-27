@@ -42,15 +42,9 @@ gulp.task('browser', watchify((_watchify) => {
           presets: [
             'es2015',
             'stage-3'
-          ],
-          plugins: [
-            'transform-async-to-generator',
-            'syntax-async-functions',
-            'transform-regenerator'
           ]
         }]
-      ],
-      builtins: [],
+      ]
     }))
     .pipe(gulp.dest('dist'));
 
