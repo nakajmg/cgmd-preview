@@ -6,6 +6,8 @@ import Event from './Event';
 export default class Linter {
   constructor() {
     this._eventify();
+    this.enable = true;
+    this.currentFilePath = null;
   }
 
   _eventify() {
@@ -13,6 +15,7 @@ export default class Linter {
     ipcManager.on(Event.executeLint, this._onExecuteLint.bind(this));
     ipcManager.on(Event.openDictionary, this._onSetRulePath.bind(this));
     ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
+    ipcManager.on(Event.toggleLinter, this._onToggleLinter.bind(this));
   }
 
   _initTextlintEngine(rulePath) {
@@ -44,14 +47,28 @@ export default class Linter {
     this.lint(filePath);
   }
 
+  _onToggleLinter() {
+    this.enable = !this.enable;
+    if (this.enable && this.currentFilePath) {
+      this.lint(this.currentFilePath);
+    }
+    else {
+      this.send('');
+    }
+  }
+
   setRulePath(rulePath) {
     this.rulePath = rulePath;
     this._initTextlintEngine(rulePath);
   }
 
   lint(filePath) {
+    if (!this.enable) {
+      this.send('');
+    }
     if (!this.textlint) return;
     if (!filePath) return;
+    this.currentFilePath = filePath;
 
     this.textlint.executeOnFiles([filePath])
       .then((results) => {
@@ -79,6 +96,10 @@ export default class Linter {
     if (this.textlint.isErrorResults(results)) {
       report = _reports(results);
     }
+    this.send(report);
+  }
+
+  send(report) {
     ipcManager.emit(Event.sendLintReport, report);
   }
   

@@ -10,4 +10,4 @@ export default {
   setRulePath: 'setRulePath',
   executeLint: 'executeLint',
   quit: 'quit'
-}
+};

@@ -24,8 +24,6 @@ export default class Main {
     ipcManager.on(Event.openMarkdown, this._onOpenMarkdown.bind(this));
     ipcManager.on(Event.openPrevMarkdown, this._onOpenMarkdown.bind(this));
     ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
-    ipcManager.on(Event.toggleHelp, this._onToggleHelp.bind(this));
-    ipcManager.on(Event.toggleLinter, this._onToggleLinter.bind(this));
   }
 
   _onReady() {
@@ -43,14 +41,6 @@ export default class Main {
 
   _onUpdatePreview(filePath) {
     this.sendMarkdown(filePath);
-  }
-
-  _onToggleHelp() {
-
-  }
-
-  _onToggleLinter() {
-
   }
 
   sendMarkdown(filePath) {

@@ -4,12 +4,12 @@ import ipcManager from './ipcManager';
 import Event from './Event';
 
 export default class WindowManager {
-  constructor() {
+  constructor(options = {}) {
     const browserWindow = new electron.BrowserWindow({
-      width: 1024,
-      height: 768
+      width: options.width || 1024,
+      height: options.height || 768
     });
-    const filePath = path.join(__dirname, '../window.html');
+    const filePath = path.join(__dirname, './window.html');
     browserWindow.loadURL(`file://${filePath}`);
     
     this.browserWindow = browserWindow;
@@ -20,6 +20,7 @@ export default class WindowManager {
     this.browserWindow.on('closed', this._onClosed.bind(this));
     ipcManager.on(Event.sendMarkdown, this._onSendMarkdown.bind(this));
     ipcManager.on(Event.sendLintReport, this._onSendLintReport.bind(this));
+    ipcManager.on(Event.toggleHelp, this._onToggleHelp.bind(this));
   }
 
   _onClosed() {
@@ -27,10 +28,18 @@ export default class WindowManager {
   }
 
   _onSendMarkdown(file) {
-    this.browserWindow.webContents.send(Event.openMarkdown, file);
+    this.send(Event.openMarkdown, file);
   }
   
   _onSendLintReport(report) {
-    this.browserWindow.send(Event.sendLintReport, report)
+    this.send(Event.sendLintReport, report)
+  }
+
+  _onToggleHelp() {
+    this.send(Event.toggleHelp);
+  }
+
+  send(eventName, data) {
+    this.browserWindow.webContents.send(eventName, data);
   }
 } 
