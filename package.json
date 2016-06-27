@@ -1,6 +1,6 @@
 {
   "name": "CGMD-Preview",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "author": "nakajmg",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "start": "electron dist/index.js",
-    "build": "electron-packager ./dist cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
+    "build": "gulp build && electron-packager ./dist cgmd-preview --platform=darwin --arch=x64 --version=1.2.3 --overwrite"
   },
   "main": "index.js",
   "dependencies": {

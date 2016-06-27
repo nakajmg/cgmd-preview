@@ -58,7 +58,7 @@ gulp.task('browser', watchify((_watchify) => {
 }));
 
 gulp.task('copy', (cb) => {
-  return gulp.src(['./src/style.min.css', './src/window.html'])
+  return gulp.src(['./src/style.min.css', './src/window.html', './package.json'])
     .pipe(gulp.dest('./dist'));
 });
 

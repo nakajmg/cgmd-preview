@@ -1,4 +1,4 @@
-var wordCounter = function (markdown) {
+export default function (markdown) {
   var ignoreCount = false;
   var count = 0;
   if (!markdown) {
@@ -36,5 +36,3 @@ var wordCounter = function (markdown) {
   });
   return count;
 };
-
-module.exports = wordCounter;
