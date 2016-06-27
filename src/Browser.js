@@ -1,4 +1,3 @@
-import open from 'open';
 import {ipcRenderer as ipc} from 'electron';
 import path from 'path';
 import axios from 'axios';
@@ -46,7 +45,7 @@ export default class Browser {
 
     switch(e.data.type) {
       case 'href':
-        open(e.data.href);
+        ipc.send(Event.openLink, e.data.href);
         break;
       case 'height':
         this._updateHeight(e.data.height);

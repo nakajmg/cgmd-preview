@@ -6,7 +6,6 @@ import Linter from './Linter';
 import ipcManager from './ipcManager';
 import wordCounter from './wordCounter';
 import fs from 'fs';
-import 'babel-polyfill';
 import Event from './Event';
 import open from 'open';
 

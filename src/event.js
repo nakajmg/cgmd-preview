@@ -10,5 +10,6 @@ export default {
   setRulePath: 'setRulePath',
   executeLint: 'executeLint',
   quit: 'quit',
-  openOnEditor: 'openCurrentFileOnEditor'
+  openOnEditor: 'openCurrentFileOnEditor',
+  openLink: 'openLink'
 };
