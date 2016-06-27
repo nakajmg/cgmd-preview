@@ -2,8 +2,8 @@ const gulp = require('gulp');
 const watchify = require('gulp-watchify');
 const sequence = require('run-sequence');
 
-const main = './index.js';
-const browser = './browser.js';
+const main = './src/index.js';
+const browser = './src/window.js';
 
 gulp.task('browserify', watchify((_watchify) => {
   var stream = gulp.src(main)
@@ -58,7 +58,7 @@ gulp.task('browser', watchify((_watchify) => {
 }));
 
 gulp.task('copy', (cb) => {
-  return gulp.src(['style.min.css', 'window.html'])
+  return gulp.src(['./src/style.min.css', './src/window.html'])
     .pipe(gulp.dest('./dist'));
 });
 
