@@ -15,6 +15,8 @@ export default class Browser {
     this.$log = document.querySelector('#log');
     this.$count = document.querySelector('#count');
     this.$height = document.querySelector('#height');
+    this._initializeArticle();
+    this._initializeREADME();
     this._eventify();
     this._beforeRender();
   }
@@ -37,8 +39,6 @@ export default class Browser {
     if (prevRulePath) {
       ipc.send(Event.openDictionary, prevRulePath);
     }
-
-    this._setReadme();
   }
 
   _onMessage(e) {
@@ -55,13 +55,17 @@ export default class Browser {
   }
 
   _onOpenMarkdown(e, file) {
-    const dirname = path.dirname(file.path);
     this._setCurrentFilePath(file.path);
-    // パスの置き換え
-    file.md = file.md.replace(/\(\.\//g, '(' + dirname + '/');
-    const article = cgmd.render(file.md);
-    this._updatePreview(article);
     this._updateCount(file.count);
+    let article = this._renderHTML(file);
+    this._updatePreview(article);
+  }
+
+  _renderHTML(file) {
+    let dirname = path.dirname(file.path);
+    file.md = file.md.replace(/\(\.\//g, '(' + dirname + '/');
+    let article = cgmd.render(file.md);
+    return article;
   }
 
   _onSendLintReport(e, results) {
@@ -86,10 +90,10 @@ export default class Browser {
   }
 
   _setCurrentRulePath(rulePath) {
-    window.localStorage.setItem('CGMD-rule-path', filePath);
+    window.localStorage.setItem('CGMD-rule-path', rulePath);
   }
 
-  _createHTML(article) {
+  _initializeArticle() {
     const html = `
       <html>
       <head>
@@ -98,52 +102,52 @@ export default class Browser {
       <body>
         <div class="CG2-narrowLayout">
           <div class="CG2-narrowLayout__main">
-            <article class="CG2-article">
-              ${article}
+            <article class="CG2-article" id="article">
             </article>
           </div>
         </div>
         <script src="http://ui.codegrid.net/assets2/js/codegrid-ui.min.js"><\/script>
         <script>
-          [].forEach.call(document.querySelectorAll('a[href]'), (el) => {
-            el.addEventListener('click', (e) => {
-              e.preventDefault();
-              var href = e.target.getAttribute('href');
-              window.parent.postMessage({type: 'href', href}, '*');
-            });
-          });
-          window.addEventListener('load', () => {
-            var height = document.querySelector('.CG2-narrowLayout').clientHeight;
-            window.parent.postMessage({type: 'height', height}, '*');
+          document.addEventListener('click', (e) => {
+            let target = e.target || e.srcElement;
+            if (target.nodeName !== 'A') return;
+            e.preventDefault();
+            let href = target.getAttribute('href');
+            window.parent.postMessage({type: 'href', href}, '*');
           });
           
-          var postHeight = (function() {
+          const postHeight = (function() {
             var interval = 300;
             var timer;
             
             return function() {
               clearTimeout(timer);
               timer = setTimeout(function() {
-                var height = document.querySelector('.CG2-narrowLayout').clientHeight + 'px';
+                let height = document.querySelector('.CG2-narrowLayout').clientHeight + 'px';
                 window.parent.postMessage({type: 'height', height}, '*');    
               }, interval);
             }
           })();
-          
+          const $article = document.querySelector('#article');
           window.addEventListener('resize', postHeight);
-          
+          window.addEventListener('message', (e) => {
+            if (e.data.type === 'update') {
+              $article.innerHTML = e.data.article;
+              Prism.highlightAll(false, postHeight);
+            }
+          });
         <\/script>
       </body>
       </html>
       `;
-    return html;
+
+    this.$iframe.contentWindow.document.open();
+    this.$iframe.contentWindow.document.close();
+    this.$iframe.contentWindow.document.write(html);
   }
 
   _updatePreview(article) {
-    const html = this._createHTML(article);
-    this.$iframe.contentWindow.document.open();
-    this.$iframe.contentWindow.document.write(html);
-    this.$iframe.contentWindow.document.close();
+    this.$iframe.contentWindow.postMessage({type: 'update', article}, '*');
   }
 
   _updateCount(count) {
@@ -154,7 +158,7 @@ export default class Browser {
     this.$height.textContent = height;
   }
 
-  _setReadme() {
+  _initializeREADME() {
     axios.get('https://raw.githubusercontent.com/pxgrid/codegrid-markdown/master/README.md')
       .then(response => {
         marked.setOptions({
@@ -164,13 +168,13 @@ export default class Browser {
         });
         let readme = marked(response.data);
         let html = `
-      <div class="CG2-narrowLayout">
-        <div class="CG2-narrowLayout__main">
-          <article class="CG2-article">
-            ${readme}
-          </article>
-        </div>
-      </div>
+          <div class="CG2-narrowLayout">
+            <div class="CG2-narrowLayout__main">
+              <article class="CG2-article">
+                ${readme}
+              </article>
+            </div>
+          </div>
       `;
         this.$readme.innerHTML = html;
       })
