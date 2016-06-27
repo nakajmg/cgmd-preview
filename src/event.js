@@ -9,5 +9,6 @@ export default {
   updatePreview: 'updatePreview',
   setRulePath: 'setRulePath',
   executeLint: 'executeLint',
-  quit: 'quit'
+  quit: 'quit',
+  openOnEditor: 'openCurrentFileOnEditor'
 };

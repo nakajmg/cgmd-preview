@@ -66,6 +66,13 @@ export const menuTemplate = [
               }
             });
         }
+      },
+      {
+        label: 'Open on Editor',
+        accelerator: 'Alt+O',
+        click: () => {
+          ipcManager.emit(Event.openOnEditor);
+        }
       }
     ]
   },

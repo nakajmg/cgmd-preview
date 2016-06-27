@@ -8,9 +8,11 @@ import wordCounter from './wordCounter';
 import fs from 'fs';
 import 'babel-polyfill';
 import Event from './Event';
+import open from 'open';
 
 export default class Main {
   constructor() {
+    this.currentFilePath = null;
     this.app = electron.app;
     this.linter = new Linter();
     this.watcher = new Watcher();
@@ -24,6 +26,7 @@ export default class Main {
     ipcManager.on(Event.openMarkdown, this._onOpenMarkdown.bind(this));
     ipcManager.on(Event.openPrevMarkdown, this._onOpenMarkdown.bind(this));
     ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
+    ipcManager.on(Event.openOnEditor, this._onOpenCurrentFileOnEditor.bind(this));
   }
 
   _onReady() {
@@ -36,11 +39,18 @@ export default class Main {
   }
   
   _onOpenMarkdown(filePath) {
+    this.currentFilePath = filePath;
     this.watcher.watch(filePath);
   }
 
   _onUpdatePreview(filePath) {
     this.sendMarkdown(filePath);
+  }
+
+  _onOpenCurrentFileOnEditor() {
+    if (this.currentFilePath) {
+      open(this.currentFilePath);
+    }
   }
 
   sendMarkdown(filePath) {
