@@ -21,6 +21,7 @@ export default class WindowManager {
     ipcManager.on(Event.sendMarkdown, this._onSendMarkdown.bind(this));
     ipcManager.on(Event.sendLintReport, this._onSendLintReport.bind(this));
     ipcManager.on(Event.toggleHelp, this._onToggleHelp.bind(this));
+    ipcManager.on(Event.setRulePath, this._onSetRulePath.bind(this));
   }
 
   _onClosed() {
@@ -37,6 +38,10 @@ export default class WindowManager {
 
   _onToggleHelp() {
     this.send(Event.toggleHelp);
+  }
+
+  _onSetRulePath(rulePath) {
+    this.send(Event.setRulePath, rulePath);
   }
 
   send(eventName, data) {

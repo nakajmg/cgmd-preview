@@ -14,7 +14,7 @@ class IPCManager extends EventEmitter {
   }
 
   _onOpenPrevMarkdown(e, filePath) {
-    this.emit(Event.openPrevMarkdown, filePath);
+    this.emit(Event.openMarkdown, filePath);
   }
 
   _onOpenDictionary(e, rulePath) {

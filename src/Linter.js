@@ -11,32 +11,35 @@ export default class Linter {
   }
 
   _eventify() {
-    ipcManager.on(Event.setRulePath, this._onSetRulePath.bind(this));
     ipcManager.on(Event.executeLint, this._onExecuteLint.bind(this));
-    ipcManager.on(Event.openDictionary, this._onSetRulePath.bind(this));
+    ipcManager.on(Event.openDictionary, this._onOpenDictionary.bind(this));
     ipcManager.on(Event.updatePreview, this._onUpdatePreview.bind(this));
     ipcManager.on(Event.toggleLinter, this._onToggleLinter.bind(this));
   }
 
   _initTextlintEngine(rulePath) {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-      _this.textlint = new TextLintEngine({});
-      var ruleConfig = {prh: {rulePaths: [`${rulePath}`]}};
-      _this.textlint.config.rules = ['prh'];
-      _this.textlint.config.rulesConfig = ruleConfig;
-      _this.textlint.textlint.ruleCreatorSet.rawRulesObject = {prh};
-      _this.textlint.textlint.ruleCreatorSet.rawRulesConfigObject = ruleConfig;
-      _this.textlint.textlint.ruleCreatorSet.rules = {prh};
-      _this.textlint.textlint.ruleCreatorSet.ruleNames = ['prh'];
-      _this.textlint.textlint.ruleCreatorSet.rulesConfig = ruleConfig;
-      _this.textlint.ruleMap._store.prh = prh;
-      resolve();
-    });
+    this.textlint = new TextLintEngine({});
+    var ruleConfig = {prh: {rulePaths: [`${rulePath}`]}};
+    this.textlint.config.rules = ['prh'];
+    this.textlint.config.rulesConfig = ruleConfig;
+    this.textlint.textlint.ruleCreatorSet.rawRulesObject = {prh};
+    this.textlint.textlint.ruleCreatorSet.rawRulesConfigObject = ruleConfig;
+    this.textlint.textlint.ruleCreatorSet.rules = {prh};
+    this.textlint.textlint.ruleCreatorSet.ruleNames = ['prh'];
+    this.textlint.textlint.ruleCreatorSet.rulesConfig = ruleConfig;
+    this.textlint.ruleMap._store.prh = prh;
   }
 
   _onExecuteLint(filePath) {
     this.lint(filePath);
+  }
+
+  _onOpenDictionary(rulePath) {
+    this._initTextlintEngine(rulePath);
+    ipcManager.emit(Event.setRulePath, rulePath);
+    if (this.currentFilePath) {
+      this.lint(this.currentFilePath);
+    }
   }
 
   _onSetRulePath(rulePath) {
@@ -58,8 +61,10 @@ export default class Linter {
   }
 
   setRulePath(rulePath) {
-    this.rulePath = rulePath;
     this._initTextlintEngine(rulePath);
+    if (this.currentFilePath) {
+      this.lint(this.currentFilePath);
+    }
   }
 
   lint(filePath) {
